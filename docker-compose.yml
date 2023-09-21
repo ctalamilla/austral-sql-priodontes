@@ -1,0 +1,25 @@
+version: '3'
+services:
+  postgres-commerce:
+    image: postgres:latest
+    container_name: postgres-commerce
+    environment:
+      POSTGRES_DB: commerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./constructor_postgres_commerce.sql:/docker-entrypoint-initdb.d/constructor.sql
+    ports:
+      - "5432:5432"
+
+  postgres-escuela:
+    image: postgres:latest
+    container_name: postgres-escuela
+    environment:
+      POSTGRES_DB: escuela
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./constructor_postgres_escuela.sql:/docker-entrypoint-initdb.d/constructor.sql
+    ports:
+      - "5433:5432"
