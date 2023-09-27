@@ -1,25 +1,19 @@
 version: '3'
 services:
-  postgres-commerce:
+  postgres:
     image: postgres:latest
-    container_name: postgres-commerce
+    container_name: postgres
     environment:
-      POSTGRES_DB: commerce
+      POSTGRES_DB: commerce,escuela
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./constructor_postgres_commerce.sql:/docker-entrypoint-initdb.d/constructor.sql
+      - ./constructor_postgres_commerce.sql:/docker-entrypoint-initdb.d/01_constructor_commerce.sql
+      - ./constructor_postgres_escuela.sql:/docker-entrypoint-initdb.d/02_constructor_escuela.sql
     ports:
       - "5432:5432"
-
-  postgres-escuela:
-    image: postgres:latest
-    container_name: postgres-escuela
-    environment:
-      POSTGRES_DB: escuela
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./constructor_postgres_escuela.sql:/docker-entrypoint-initdb.d/constructor.sql
-    ports:
-      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
